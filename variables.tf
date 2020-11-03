@@ -38,10 +38,6 @@ variable "cyclecloud_password" {
   description = "The initial password for the CycleCloud Admin user"
 }
 
-variable "cyclecloud_tenant_id" {
-  description = "Azure Tenant ID"
-}
-
 variable "cyclecloud_public_access_address_prefixes"{
   description = "PublicIP address ranges allowed to connect to CycleCloud"
 }

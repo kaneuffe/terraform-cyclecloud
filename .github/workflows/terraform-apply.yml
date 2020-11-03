@@ -18,7 +18,6 @@ jobs:
       TF_VAR_admin_key_data: ${{secrets.TF_VAR_ADMIN_KEY_DATA}}
       TF_VAR_cyclecloud_username: ${{secrets.TF_VAR_CYCLECLOUD_USERNAME}}
       TF_VAR_cyclecloud_password: ${{secrets.TF_VAR_CYCLECLOUD_PASSWORD}}
-      TF_VAR_cyclecloud_tenant_id: ${{secrets.TF_ARM_TENANT_ID}}
       TF_VAR_cyclecloud_public_access_address_prefixes: ${{secrets.TF_VAR_CYCLECLOUD_PUBLIC_ACCESS_ADDRESS_PREFIXES}}
 
     steps:
