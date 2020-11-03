@@ -97,7 +97,7 @@ resource "azurerm_network_security_group" "acc_subnet_nsg" {
 }
 
 # Connect the security group to the subnet
-resource "azurerm_subnet_network_security_group_association" "acc_subnbet_nsg_assign" {
+resource "azurerm_subnet_network_security_group_association" "acc_subnet_nsg_assign" {
     subnet_id                 = azurerm_subnet.acc_subnet.id
     network_security_group_id = azurerm_network_security_group.acc_subnet_nsg.id
 }
