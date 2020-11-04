@@ -16,10 +16,6 @@ terraform {
 data "azurerm_subscription" "current" {
 }
 
-data "azurerm_role_definition" "contributor" {
-  name = "Contributor"
-}
-
 # Create the resource group
 resource "azurerm_resource_group" "acc_rg" {
   name     = "${var.prefix}-rg"
@@ -127,7 +123,7 @@ resource "azurerm_network_interface" "acc_nic" {
 
 # Create CycleCloud VM
 resource "azurerm_virtual_machine" "acc_vm" {
-  name                  = "cycleserver7"
+  name                  = var.cyclecloud_computer_name
   resource_group_name   = azurerm_resource_group.acc_rg.name
   location              = azurerm_resource_group.acc_rg.location
   network_interface_ids = [azurerm_network_interface.acc_nic.id]
@@ -157,7 +153,6 @@ resource "azurerm_virtual_machine" "acc_vm" {
   os_profile {
     computer_name  = var.cyclecloud_computer_name
     admin_username = var.admin_username
-    admin_password = var.admin_password
     custom_data    = base64encode( <<CUSTOM_DATA
 #cloud-config
 #
@@ -240,9 +235,9 @@ runcmd:
   }
 }
 
-# Asign managed ID to the VM
+# Assign role to the managed ID
 resource "azurerm_role_assignment" "acc_mi_role" {
-  scope               = data.azurerm_subscription.current.id
-  role_definition_id  = "${data.azurerm_subscription.current.id}${data.azurerm_role_definition.contributor.id}"
-  principal_id        = lookup(azurerm_virtual_machine.acc_vm.identity[0], "principal_id")
+  scope                 = data.azurerm_subscription.current.id
+  role_definition_name  = "Contributor"
+  principal_id          = lookup(azurerm_virtual_machine.acc_vm.identity[0], "principal_id")
 }
