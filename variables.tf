@@ -14,24 +14,22 @@ variable "machine_type" {
 }
 
 variable "cyclecloud_computer_name" {
-    description =  "The private hostname for the CycleCloud VM"
-    default = "accserver"
+  description =  "The private hostname for the CycleCloud VM"
+  default = "accserver"
 }
 
 variable "admin_username" {
-  description = "The username for the CycleCloud VM Admin user and VM user"
-}
-
-variable "admin_password" {
-  description = "The password for the CycleCloud VM Admin user"
+  description = "The username for the CycleCloud VM Admin user"
+  default = "serveradmin"
 }
 
 variable "admin_key_data" {
-  description = "The public SSH key for the CycleCloud VM admin"
+  description = "The public SSH key for the CycleCloud VM admin user"
 }
 
 variable "cyclecloud_username" {
-  description = "The username for the initial CycleCloud Admin user and VM user"
+  description = "The username for the initial CycleCloud Admin user"
+  default = "accadmin"
 }
 
 variable "cyclecloud_password" {
