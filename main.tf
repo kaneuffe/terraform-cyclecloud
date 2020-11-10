@@ -110,11 +110,6 @@ resource "azurerm_public_ip" "acc_public_ip" {
   allocation_method            = "Dynamic"
 }
 
-# Output public IP address
-output "cyclecloud_server_public_ip" {
-  value = "data.azurerm_public_ip.acc_public_ip.ip_address"
-}
-
 # Create the network interface for the CycleCloud server
 resource "azurerm_network_interface" "acc_nic" {
   name                = "${var.prefix}-nic"
@@ -248,4 +243,17 @@ resource "azurerm_role_assignment" "acc_mi_role" {
   scope                 = data.azurerm_subscription.current.id
   role_definition_name  = "Contributor"
   principal_id          = lookup(azurerm_virtual_machine.acc_vm.identity[0], "principal_id")
+}
+
+
+# Data public IP address
+data "azurerm_public_ip" "acc_vm" {
+  name                = azurerm_public_ip.acc_public_ip.name
+  resource_group_name = azurerm_public_ip.acc_public_ip.resource_group_name
+  depends_on          = [azurerm_virtual_machine.acc_vm]  
+}
+
+# Output public IP address
+output "cyclecloud_server_public_ip" {
+  value = data.azurerm_public_ip.acc_vm.ip_address
 }
