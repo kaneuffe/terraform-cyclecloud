@@ -13,6 +13,7 @@ terraform {
   }
 }
 
+# Get the current Azure subcription data
 data "azurerm_subscription" "current" {
 }
 
@@ -22,11 +23,12 @@ resource "azurerm_resource_group" "acc_rg" {
   location = var.location
 }
 
-# Create CycleCloud storage account 
+# Create random number for the storage account name
 resource "random_id" "storage_account" {
   byte_length = 8
 }
 
+# Create CycleCloud storage account
 resource "azurerm_storage_account" "acc_locker" {
   name                     = "${var.prefix}${lower(random_id.storage_account.hex)}sa" 
   resource_group_name      = azurerm_resource_group.acc_rg.name
@@ -52,6 +54,7 @@ resource "azurerm_subnet" "acc_subnet" {
   service_endpoints    = ["Microsoft.Storage"]
 }
 
+# Create a Network Security Group
 resource "azurerm_network_security_group" "acc_subnet_nsg" {
     name                = "${var.prefix}-subnet-nsg"
     location            = azurerm_resource_group.acc_rg.location
@@ -92,13 +95,13 @@ resource "azurerm_network_security_group" "acc_subnet_nsg" {
     }
 }
 
-# Connect the security group to the subnet
+# Assign the netwrok security group to the subnet
 resource "azurerm_subnet_network_security_group_association" "acc_subnet_nsg_assign" {
     subnet_id                 = azurerm_subnet.acc_subnet.id
     network_security_group_id = azurerm_network_security_group.acc_subnet_nsg.id
 }
 
-# Create a public IP for the CycleServer
+# Create a public IP for the CycleCloud server
 resource "azurerm_public_ip" "acc_public_ip" {
   name                         = "${var.prefix}-public-ip"
   location                     = azurerm_resource_group.acc_rg.location
@@ -107,7 +110,7 @@ resource "azurerm_public_ip" "acc_public_ip" {
   allocation_method            = "Dynamic"
 }
 
-# Create the network interface
+# Create the network interface for the CycleCloud server
 resource "azurerm_network_interface" "acc_nic" {
   name                = "${var.prefix}-nic"
   location            = azurerm_resource_group.acc_rg.location
@@ -121,7 +124,7 @@ resource "azurerm_network_interface" "acc_nic" {
   }
 }
 
-# Create CycleCloud VM
+# Create CycleCloud server VM
 resource "azurerm_virtual_machine" "acc_vm" {
   name                  = var.cyclecloud_computer_name
   resource_group_name   = azurerm_resource_group.acc_rg.name
