@@ -23,20 +23,6 @@ resource "azurerm_resource_group" "acc_rg" {
   location = var.location
 }
 
-# Create random number for the storage account name
-resource "random_id" "storage_account" {
-  byte_length = 8
-}
-
-# Create CycleCloud storage account
-resource "azurerm_storage_account" "acc_locker" {
-  name                     = "${var.prefix}${lower(random_id.storage_account.hex)}sa" 
-  resource_group_name      = azurerm_resource_group.acc_rg.name
-  location                 = azurerm_resource_group.acc_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
-
 # Create the VNET
 resource "azurerm_virtual_network" "acc_vnet" {
   name                = "${var.prefix}-network"
@@ -101,6 +87,20 @@ resource "azurerm_subnet_network_security_group_association" "acc_subnet_nsg_ass
     network_security_group_id = azurerm_network_security_group.acc_subnet_nsg.id
 }
 
+# Create random number for the storage account name
+resource "random_id" "storage_account" {
+  byte_length = 8
+}
+
+# Create CycleCloud storage account
+resource "azurerm_storage_account" "acc_locker" {
+  name                     = "${var.prefix}${lower(random_id.storage_account.hex)}sa" 
+  resource_group_name      = azurerm_resource_group.acc_rg.name
+  location                 = azurerm_resource_group.acc_rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
 # Create a public IP for the CycleCloud server
 resource "azurerm_public_ip" "acc_public_ip" {
   name                         = "${var.prefix}-public-ip"
@@ -108,6 +108,11 @@ resource "azurerm_public_ip" "acc_public_ip" {
   resource_group_name          = azurerm_resource_group.acc_rg.name
   #domain_name_label           = var.cyclecloud_dns_label
   allocation_method            = "Dynamic"
+}
+
+# Output public IP address
+output "cyclecloud_server_public_ip" {
+  value = "data.azurerm_public_ip.acc_public_ip.ip_address"
 }
 
 # Create the network interface for the CycleCloud server
