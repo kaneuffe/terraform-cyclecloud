@@ -245,7 +245,6 @@ resource "azurerm_role_assignment" "acc_mi_role" {
   principal_id          = lookup(azurerm_virtual_machine.acc_vm.identity[0], "principal_id")
 }
 
-
 # Data public IP address
 data "azurerm_public_ip" "acc_vm" {
   name                = azurerm_public_ip.acc_public_ip.name
