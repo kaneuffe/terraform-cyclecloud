@@ -217,12 +217,11 @@ runcmd:
 - sed -i --follow-symlinks "s/webServerSslPort=.*/webServerSslPort=443/g" /opt/cycle_server/config/cycle_server.properties
 - sed -i --follow-symlinks "s/webServerEnableHttps=.*/webServerEnableHttps=true/g" /opt/cycle_server/config/cycle_server.properties
 - systemctl restart cycle_server
-- sleep 60
+- /opt/cycle_server/cycle_server await_startup
 - mv ./account_data.json /opt/cycle_server/config/data/
 - /opt/cycle_server/cycle_server execute "update Application.Setting set Value = false where name == \"authorization.check_datastore_permissions\""
 - unzip /opt/cycle_server/tools/cyclecloud-cli.zip
 - ./cyclecloud-cli-installer/install.sh --system
-- sleep 60
 - /usr/local/bin/cyclecloud initialize --batch --url=https://localhost --verify-ssl=false --username="${var.cyclecloud_username}" --password="${var.cyclecloud_password}"
 - /usr/local/bin/cyclecloud account create -f ./azure_data.json
   CUSTOM_DATA
