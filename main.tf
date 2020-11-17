@@ -48,7 +48,7 @@ resource "azurerm_network_security_group" "acc_subnet_nsg" {
 
     security_rule {
         name                       = "SSH"
-        priority                   = 1001
+        priority                   = 1010
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
@@ -59,7 +59,7 @@ resource "azurerm_network_security_group" "acc_subnet_nsg" {
     }
     security_rule {
         name                       = "HTTP"
-        priority                   = 1002
+        priority                   = 1020
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
@@ -70,7 +70,7 @@ resource "azurerm_network_security_group" "acc_subnet_nsg" {
     }
     security_rule {
         name                       = "HTTPS"
-        priority                   = 1003
+        priority                   = 1030
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
@@ -213,6 +213,7 @@ write_files:
   path: ./azure_data.json
   permissions: '0644'
 runcmd:
+- sed -i --follow-symlinks "s/webServerMaxHeapSize=.*/webServerMaxHeapSize=4096M/g" /opt/cycle_server/config/cycle_server.properties
 - sed -i --follow-symlinks "s/webServerPort=.*/webServerPort=80/g" /opt/cycle_server/config/cycle_server.properties
 - sed -i --follow-symlinks "s/webServerSslPort=.*/webServerSslPort=443/g" /opt/cycle_server/config/cycle_server.properties
 - sed -i --follow-symlinks "s/webServerEnableHttps=.*/webServerEnableHttps=true/g" /opt/cycle_server/config/cycle_server.properties
@@ -222,6 +223,7 @@ runcmd:
 - /opt/cycle_server/cycle_server execute "update Application.Setting set Value = false where name == \"authorization.check_datastore_permissions\""
 - unzip /opt/cycle_server/tools/cyclecloud-cli.zip
 - ./cyclecloud-cli-installer/install.sh --system
+- sleep 60
 - /usr/local/bin/cyclecloud initialize --batch --url=https://localhost --verify-ssl=false --username="${var.cyclecloud_username}" --password="${var.cyclecloud_password}"
 - /usr/local/bin/cyclecloud account create -f ./azure_data.json
   CUSTOM_DATA
