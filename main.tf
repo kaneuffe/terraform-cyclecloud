@@ -206,7 +206,7 @@ write_files:
       "AzureRMSubscriptionId": "${data.azurerm_subscription.current.subscription_id}",
       "AzureRMUseManagedIdentity": true,
       "Location": "westeurope",
-      "RMStorageAccount": "${var.cyclecloud_storage_account}",
+      "RMStorageAccount": "${azurerm_storage_account.acc_locker.name}",
       "RMStorageContainer": "cyclecloud"
     }
   owner: root:root
