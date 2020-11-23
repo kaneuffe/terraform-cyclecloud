@@ -14,7 +14,9 @@ To run the templates, youn need to set the following environment varibles
 - TF_VAR_cyclecloud_username (CycleCloud GUI administrator username)
 - TF_VAR_cyclecloud_password (CycleCloud GUI administrator username)
 - TF_VAR_cyclecloud_public_access_address_prefixes (Your IP adress range to avoid other IPs to access the environment)
+
 and use either az login or a service principle which requires these addtikonal variables to be defined:
+
 - ARM_CLIENT_ID
 - ARM_CLIENT_SECRET
 - ARM_SUBSCRIPTION_ID
