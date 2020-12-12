@@ -9,7 +9,7 @@ To be able to run this terraform template yourself or a already created service 
 ## Environment variables
 To run the templates, you need to set the following environment variables:
 - TF_VAR_admin_username (CycleCloud VM OS administrator username)
-- TF_VAR_admin_password (CycleCLoud VM OS administrator password - to make password authentication to work please change "disable_password_authentication = false" in the main.tf template)
+- TF_VAR_admin_password (CycleCLoud VM OS administrator password - to make password authentication work, please change "disable_password_authentication = false" in the main.tf template)
 - TF_VAR_admin_key_data (CyclecCloud VM OS administrator public ssh key)
 - TF_VAR_cyclecloud_username (CycleCloud GUI administrator username)
 - TF_VAR_cyclecloud_password (CycleCloud GUI administrator username)
